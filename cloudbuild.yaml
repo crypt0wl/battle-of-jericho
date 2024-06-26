@@ -1,0 +1,29 @@
+steps:
+  # Build for Trigger 1 (e.g., Update Data)
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'update_data'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/update_data_v2:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/update_data_v2:latest']
+
+  # Build for Trigger 2 (e.g., Run Coin Predictions)
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'calculate_metrics'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/run_coin_predictions:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/run_coin_predictions:latest'] 
+
+  # Logging Agent Configuration
+  - name: 'gcr.io/cloudbuild-containers/cloud-logging-agent:latest'
+    args: ['--config', 'logging.yaml'] 
+
+images:
+  - 'us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/update_data_v2:latest'
+  - 'us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/run_coin_predictions:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  env:
+    - _IMAGE=us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/update_data_v2:latest
+    - _IMAGE=us-central1-docker.pkg.dev/battle-of-jericho/my-docker-repo/run_coin_predictions:latest
+  dynamic_substitutions: true
