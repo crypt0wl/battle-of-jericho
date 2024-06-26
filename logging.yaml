@@ -1,0 +1,7 @@
+log:
+  logName: 'cloudbuild'
+  labels:
+    build_id: '${BUILD_ID}'
+    project_id: '${PROJECT_ID}'
+    commit_sha: '${COMMIT_SHA}'
+    repo_name: '${REPO_NAME}'
