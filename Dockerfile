@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Specify the command to run the application
-CMD ["functions-framework", "--target=update_data_v2"]
+CMD ["functions-framework", "--target=run_coin_predictions"]
